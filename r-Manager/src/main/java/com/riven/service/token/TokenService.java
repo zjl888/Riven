@@ -163,7 +163,11 @@ public class TokenService {
      * @return
      */
     public String getToken(HttpServletRequest request){
-        return request.getHeader(header);
+        String token = request.getHeader(this.header);
+        if(StringUtils.isNotEmpty(token)&&token.startsWith(Constants.TOKEN_PREFIX)){
+            token=token.replace(Constants.TOKEN_PREFIX,"");
+        }
+        return token;
     }
 
     /**
