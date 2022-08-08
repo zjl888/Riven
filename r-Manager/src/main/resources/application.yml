@@ -1,0 +1,36 @@
+server:
+  port: 8888
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.DmDialect
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    #driverClassName: com.mysql.cj.jdbc.Driver
+    driverClassName: dm.jdbc.driver.DmDriver
+    druid:
+      url: jdbc:dm://localhost:5236/ZZZ
+      username: ZZZ
+      password: 12345678
+    # 配置redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 12345
+    jedis:
+      pool:
+        #最大活跃连接10
+        max-active: 10
+        max-wait: 3000 #最大等待时间
+        max-idle: 10 #最大闲置连接
+        min-idle: 1 #最小闲置连接
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefghijklmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
