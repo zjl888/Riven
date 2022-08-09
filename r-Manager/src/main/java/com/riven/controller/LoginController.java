@@ -57,6 +57,7 @@ public class LoginController {
     @RequestMapping ("/test")
     public String test(){
         System.out.println(111);
+        System.out.println(2222);
         String token = redisCache.getCacheObject("token");
         return token;
     }
