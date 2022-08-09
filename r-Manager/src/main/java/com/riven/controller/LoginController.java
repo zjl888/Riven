@@ -58,6 +58,7 @@ public class LoginController {
     public String test(){
         System.out.println(111);
         System.out.println(2222);
+        System.out.println(333);
         String token = redisCache.getCacheObject("token");
         return token;
     }
