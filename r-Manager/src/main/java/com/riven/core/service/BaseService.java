@@ -1,4 +1,5 @@
 package com.riven.core.service;
+
 import com.riven.core.dao.BaseDao;
 
 import java.io.Serializable;

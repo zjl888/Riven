@@ -71,6 +71,5 @@ public class LoginController {
     @PostMapping("/select")
     public User select(String username){
         return userService.select(username);
-
     }
 }

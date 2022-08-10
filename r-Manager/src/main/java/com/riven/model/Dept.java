@@ -29,6 +29,18 @@ public class Dept extends BaseEntity {
     private String ancestors;
     private String deptName;
     private Integer orderNum;
+    /**
+     * 状态
+     * 0:正常
+     * 1:停用
+     */
+    private String status;
+    /**
+     * 删除
+     * 0:正常
+     * 1:删除
+     */
+    private String delFlag;
     @Transient
     private String parentName;
     @Transient
@@ -96,6 +108,22 @@ public class Dept extends BaseEntity {
 
     public void setChildren(List<Dept> children) {
         this.children = children;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
     }
 
     @Override
