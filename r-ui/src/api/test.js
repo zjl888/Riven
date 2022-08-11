@@ -7,3 +7,9 @@ export function select(data){
         data:data
     })
 }
+export function logicDelete(deptId){
+    return request({
+        url:'/dept/'+deptId,
+        method:'delete',
+    })
+}

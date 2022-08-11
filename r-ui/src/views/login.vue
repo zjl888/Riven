@@ -40,12 +40,11 @@ export default {
       console.log(11)
       this.$store.dispatch("Login",this.loginBody).then(()=>{
         console.log(666)
-        this.$router.push("/firstPage")
+        this.$router.push("/index")
       }).catch(()=>{
         console.log(555)
         this.loading=false
       })
-
     }
   }
 }
