@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 public interface DeptService extends BaseService<Dept, DeptDao> {
     /**
-     * 判断部门是否已存在
+     * 判断部门名称是否已存在
      * @param dept
      * @return
      */
@@ -38,4 +38,39 @@ public interface DeptService extends BaseService<Dept, DeptDao> {
      * @return
      */
     public Integer logicDelete(Long deptId);
+
+    /**
+     * 是否含有未停用的下级部门
+     * @param deptId
+     * @return
+     */
+    public Integer hasNormalChildDept(Long deptId);
+
+    /**
+     * 修改部门信息
+     * @param dept
+     * @return
+     */
+    public Integer updateDept(Dept dept);
+
+    /**
+     * 更新子部门的祖级列表
+     * @param deptId
+     * @param newAncestors
+     * @param oldAncestors
+     */
+    void updateChildAncestors(Long deptId,String newAncestors,String oldAncestors);
+
+    /**
+     * 更改部门的所有的上级部门为启用状态
+     * @param dept
+     */
+    void updateAncestorsDeptStatus(Dept dept);
+
+    /**
+     * 根据deptId查询部门详细信息
+     * @param deptId
+     * @return
+     */
+    Dept selectByDeptId(Long deptId);
 }

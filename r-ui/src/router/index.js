@@ -14,6 +14,10 @@ export const constantRoutes=[
     {
         path:'/firstPage',
         component:()=>import('@/views/firstPage')
+    },
+    {
+        path: '/register',
+        component:()=>import('@/views/register')
     }
 ]
 export default new Router({

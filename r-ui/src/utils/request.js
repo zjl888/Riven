@@ -1,7 +1,7 @@
 import axios from "axios";
 import {getToken} from "@/utils/cookies";
-import {saveAs} from 'file-saver'
-import errorCode from "@/utils/errorCode";
+//import {saveAs} from 'file-saver'
+//import errorCode from "@/utils/errorCode";
 
 //设置axios请求头携带的数据格式
 axios.defaults.headers['Content-Type']='application/json;charset=utf-8'
