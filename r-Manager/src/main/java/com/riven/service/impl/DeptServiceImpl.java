@@ -174,4 +174,15 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept, DeptDao> implements D
     public Dept selectByDeptId(Long deptId) {
         return deptDao.findByDeptId(deptId);
     }
+
+    @Transactional
+    @Override
+    public Integer updateTest(Dept dept) {
+        //持久态
+        Dept dept1=deptDao.findByDeptId(dept.getDeptId());
+        //与库中数据对比，不同则更新
+        dept1.setUpdateTime(new Date());
+        dept1.setUpdateBy(SecurityUtils.getLoginUser().getUsername());
+        return 1;
+    }
 }

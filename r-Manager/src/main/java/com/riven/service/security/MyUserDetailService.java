@@ -33,7 +33,7 @@ public class MyUserDetailService implements UserDetailsService {
         //简单权限，测试使用
         //SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getEx());
         //创建UserDetails对象返回给认证提供者
-        return new LoginUser(user.getId().toString(),user,roleMenuService.selectPermissions(user.getId()));
+        return new LoginUser(user.getId(),user,roleMenuService.selectPermissions(user.getId()));
                 //User(username,passwordEncoder.encode(user.getPassword()), Collections.singleton(authority));
     }
 }

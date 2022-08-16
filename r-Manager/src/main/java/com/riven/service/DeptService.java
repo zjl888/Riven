@@ -73,4 +73,6 @@ public interface DeptService extends BaseService<Dept, DeptDao> {
      * @return
      */
     Dept selectByDeptId(Long deptId);
+
+    Integer updateTest(Dept dept);
 }

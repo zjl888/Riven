@@ -1,45 +1,43 @@
 <template>
 <div>
-  <el-menu
-      :default-active="activeIndex2"
-      class="el-menu-demo"
-      mode="horizontal"
-      @select="handleSelect"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b">
-    <el-menu-item index="1">处理中心</el-menu-item>
-    <el-submenu index="2">
-      <template slot="title">我的工作台</template>
-      <el-menu-item index="2-1">选项1</el-menu-item>
-      <el-menu-item index="2-2">选项2</el-menu-item>
-      <el-menu-item index="2-3">选项3</el-menu-item>
-      <el-submenu index="2-4">
-        <template slot="title">选项4</template>
-        <el-menu-item index="2-4-1">选项1</el-menu-item>
-        <el-menu-item index="2-4-2">选项2</el-menu-item>
-        <el-menu-item index="2-4-3">选项3</el-menu-item>
-      </el-submenu>
-    </el-submenu>
-    <el-menu-item index="3" disabled>消息中心</el-menu-item>
-    <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
-  </el-menu>
+  <el-tabs v-model="activeName" type="card">
+    <el-tab-pane name="test1">
+    <test1 :user="user" ref="test1"></test1>
+    </el-tab-pane>
+    <el-tab-pane name="test2">
+    <test2></test2>
+    </el-tab-pane>
+  </el-tabs>
 </div>
 </template>
 
 <script>
+import Test1 from "@/views/test1";
+import Test2 from "@/views/test2";
 export default {
   name: "firstPage",
+  components: {Test2, Test1},
   data() {
     return {
+      activeName:'test1',
       activeIndex: '1',
-      activeIndex2: '1'
+      activeIndex2: '1',
+      user:{
+        name:{
+          firstName:'zzz',
+          lastName:'kkk'
+        },
+        sex:'男'
+      }
     };
   },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     }
+  },
+  created() {
+    this.$refs.test1.name=this.name
   }
 }
 </script>

@@ -1,22 +1,21 @@
 package com.riven.controller;
 import com.riven.constant.Constants;
-import com.riven.model.LoginBody;
-import com.riven.model.RegisterBody;
-import com.riven.model.User;
+import com.riven.core.controller.BaseController;
+import com.riven.model.*;
 import com.riven.service.LoginUserService;
 import com.riven.service.RegisterService;
 import com.riven.service.UserService;
+import com.riven.service.menuService;
 import com.riven.util.AjaxResult;
 import com.riven.util.RedisCache;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.riven.util.SecurityUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
-public class LoginController {
+public class LoginController extends BaseController {
     @Resource
     private LoginUserService loginUserService;
     @Resource
@@ -25,6 +24,8 @@ public class LoginController {
     private RedisCache redisCache;
     @Resource
     private RegisterService registerService;
+    @Resource
+    private menuService menuService;
 
     /**
      * 登录
@@ -71,5 +72,11 @@ public class LoginController {
     @PostMapping("/select")
     public User select(String username){
         return userService.select(username);
+    }
+    @GetMapping("/getRouters")
+    public AjaxResult getRoutes(){
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        List<Menu> menus = menuService.selectMenuTreeById(loginUser.getUserId());
+        return AjaxResult.success(menuService.buildMenus(menus));
     }
 }

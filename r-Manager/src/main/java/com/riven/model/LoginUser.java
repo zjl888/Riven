@@ -13,7 +13,7 @@ public class LoginUser implements UserDetails {
     /**
      * 用户id
      */
-    private String userId;
+    private Long userId;
     /**
      * 唯一标识uuid
      */
@@ -35,7 +35,7 @@ public class LoginUser implements UserDetails {
      */
     private Set<String> permissions;
 
-    public LoginUser(String userId, User user, Set<String> permissions) {
+    public LoginUser(Long userId, User user, Set<String> permissions) {
         this.userId = userId;
         this.user = user;
         this.permissions = permissions;
@@ -80,11 +80,11 @@ public class LoginUser implements UserDetails {
         return true;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

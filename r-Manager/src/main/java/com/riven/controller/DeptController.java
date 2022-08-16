@@ -75,6 +75,10 @@ public class DeptController extends BaseController {
      */
     @GetMapping("/{deptId}")
     public AjaxResult selectByDeptId(@PathVariable Long deptId){
-        return AjaxResult.success(deptService.selectByDeptId(deptId));
+        return AjaxResult.success("查询AAAAAAAAAAAA失败！！！！！！",deptService.selectByDeptId(deptId));
+    }
+    @PostMapping("/updateTest")
+    public AjaxResult updateTest(Dept dept){
+        return toAjax(deptService.updateTest(dept));
     }
 }

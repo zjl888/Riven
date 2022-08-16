@@ -68,7 +68,8 @@ export default {
       console.log(11)
       this.$store.dispatch("Login",this.loginBody).then(()=>{
         console.log(666)
-        this.$router.push("/index")
+        //TODO
+        this.$router.push("/")
       }).catch(()=>{
         console.log(555)
         this.loading=false
