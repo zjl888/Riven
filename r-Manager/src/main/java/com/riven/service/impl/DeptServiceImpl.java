@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author :zhujl
@@ -184,5 +182,78 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept, DeptDao> implements D
         dept1.setUpdateTime(new Date());
         dept1.setUpdateBy(SecurityUtils.getLoginUser().getUsername());
         return 1;
+    }
+
+    @Override
+    public List<Dept> list(Dept dept) {
+        StringBuilder sql=new StringBuilder("select * from z_dept where del_flag='0' ");
+        Map<String,Object> params=new HashMap<>();
+        if (StringUtils.isNotNull(dept.getOrgId())){
+            sql.append("and org_id=:orgId ");
+            params.put("orgId",dept.getOrgId());
+        }
+        if (StringUtils.isNotNull(dept.getDeptName())){
+            sql.append("and dept_name=:deptName ");
+            params.put("deptName",dept.getDeptName());
+        }
+        if (StringUtils.isNotNull(dept.getStatus())){
+            sql.append("and status=:status ");
+            params.put("status",dept.getStatus());
+        }
+        sql.append("order by parent_id,order_num");
+        return deptDao.listBySql(sql.toString(),params);
+    }
+
+    @Override
+    public List<Dept> buildDeptTree(List<Dept> list) {
+        ArrayList<Dept> returnList = new ArrayList<>();
+        for (Dept dept:list
+             ) {
+            if (dept.getParentId()==0){
+                returnList.add(dept);
+            }
+            buildChildTree(list,dept);
+        }
+        return returnList;
+    }
+
+    @Override
+    public void buildChildTree(List<Dept> list, Dept dept) {
+        List<Dept> deptList = buildChild(list, dept);
+        dept.setChildren(deptList);
+        for (Dept dept1:deptList
+             ) {
+            if (StringUtils.isNotNull(deptDao.selectChildUnique(dept1.getDeptId()))){
+                buildChild(list,dept1);
+            }
+        }
+    }
+
+    @Override
+    public List<Dept> buildChild(List<Dept> list, Dept dept) {
+        ArrayList<Dept> deptList = new ArrayList<>();
+        for (Dept dept1:list
+             ) {
+            if (dept.getDeptId().longValue()==dept1.getParentId()){
+                deptList.add(dept1);
+            }
+        }
+        return deptList;
+    }
+
+    @Override
+    public void insertList(List<Dept> deptList,Boolean updateParam) {
+        if (StringUtils.isNotEmpty(deptList)||deptList.size()==0){
+            throw new ServiceException("导入数据不能为空");
+        }
+        int successfulNum=0;
+        int failureNum=0;
+        StringBuilder successMsg=new StringBuilder();
+        StringBuilder failureMsg=new StringBuilder();
+        for (Dept dept:deptList
+             ) {
+
+        }
+        deptDao.saveAllAndFlush(deptList);
     }
 }

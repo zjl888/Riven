@@ -55,7 +55,8 @@ public interface DeptDao extends BaseDao<Dept,Serializable> {
      */
     //FIND_IN_SET(str,strlist),str是否存在于strlist当中，不存在返回0
     //存在，例如（‘1’，‘3，2，1’）返回3，即str在strlist中的位置。
-    @Query(value = "select count(*) from Z_Dept  where status=0 and del_Flag=0 and FIND_IN_SET(dept_Id=:deptId,ancestors)",nativeQuery = true)
+    //需要在达梦数据库中建立find_in_set函数，否则会报错。
+    @Query(value = "select count(*) from Z_Dept  where status=0 and del_Flag=0 and FIND_IN_SET(:deptId,ancestors)",nativeQuery = true)
     Integer hasNormalChildDept(Long deptId);
 
     /**
@@ -63,7 +64,7 @@ public interface DeptDao extends BaseDao<Dept,Serializable> {
      * @param deptId
      * @return
      */
-    @Query(value = "select * from Z_DEPT where FIND_IN_SET(dept_Id=:deptId,ancestors)",nativeQuery = true)
+    @Query(value = "select * from Z_DEPT where find_in_set(:deptId,ancestors)",nativeQuery = true)
     List<Dept> selectChildDept(Long deptId);
 
     /**
@@ -73,4 +74,6 @@ public interface DeptDao extends BaseDao<Dept,Serializable> {
     @Modifying
     @Query(value = "update z_dept set status=:#{#dept.status},update_Time=:#{#dept.updateTime},update_By=:#{#dept.updateBy} where dept_Id=:#{#dept.deptId}",nativeQuery = true)
     void updateAncestorsDeptStatus(@Param("dept") Dept dept);
+    @Query(value = "select * from z_dept where parent_id=:deptId limit 1",nativeQuery = true)
+    Dept selectChildUnique(Long deptId);
 }

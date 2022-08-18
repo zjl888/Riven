@@ -31,6 +31,10 @@ public class LoginUser implements UserDetails {
      */
     private User user;
     /**
+     * 机构id
+     */
+    private Long orgId;
+    /**
      * 权限列表
      */
     private Set<String> permissions;
@@ -58,6 +62,14 @@ public class LoginUser implements UserDetails {
     @Override
     public String getUsername() {
         return user.getUsername();
+    }
+
+    public Long getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(Long orgId) {
+        this.orgId = orgId;
     }
 
     @Override

@@ -145,14 +145,14 @@ public class BaseController
         return getLoginUser().getDeptId();
     }
 
-    *//**
+    /**
      * 获取登录机构id
-     *//*
+     */
     public Long getOrgId()
     {
         return getLoginUser().getOrgId();
     }
-    *//**
+    /**
      * 获取登录机构名称
      *//*
     public String getOrgName()

@@ -1,5 +1,6 @@
 package com.riven.model;
 
+import com.riven.annotation.Excel;
 import com.riven.model.base.BaseEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -22,24 +23,32 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 public class Dept extends BaseEntity {
+    @Excel(name = "ID",cellType = Excel.ColumnType.STRING)
     @Id
     private Long deptId;
+    @Excel(name = "pId",cellType = Excel.ColumnType.STRING)
     private Long parentId;
+    @Excel(name = "orgId",cellType = Excel.ColumnType.STRING)
     private Long orgId;
+    @Excel(name = "ancestors",cellType = Excel.ColumnType.STRING)
     private String ancestors;
+    @Excel(name = "部门名称",cellType = Excel.ColumnType.STRING)
     private String deptName;
+    @Excel(name = "排序",cellType = Excel.ColumnType.STRING)
     private Integer orderNum;
     /**
      * 状态
      * 0:正常
      * 1:停用
      */
+    @Excel(name = "状态",cellType = Excel.ColumnType.STRING)
     private String status;
     /**
      * 删除
      * 0:正常
      * 1:删除
      */
+    @Excel(name = "delFlag",cellType = Excel.ColumnType.STRING)
     private String delFlag;
     @Transient
     private String parentName;
