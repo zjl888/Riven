@@ -30,7 +30,7 @@ public class Dept extends BaseEntity {
     private Long parentId;
     @Excel(name = "orgId",cellType = Excel.ColumnType.STRING)
     private Long orgId;
-    @Excel(name = "ancestors",cellType = Excel.ColumnType.STRING)
+    @Excel(name = "ancestors",cellType = Excel.ColumnType.STRING,type = Excel.Type.EXPORT)
     private String ancestors;
     @Excel(name = "部门名称",cellType = Excel.ColumnType.STRING)
     private String deptName;
@@ -48,7 +48,7 @@ public class Dept extends BaseEntity {
      * 0:正常
      * 1:删除
      */
-    @Excel(name = "delFlag",cellType = Excel.ColumnType.STRING)
+    @Excel(name = "delFlag",cellType = Excel.ColumnType.STRING,type = Excel.Type.EXPORT)
     private String delFlag;
     @Transient
     private String parentName;

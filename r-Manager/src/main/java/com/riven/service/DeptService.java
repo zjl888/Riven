@@ -111,5 +111,5 @@ public interface DeptService extends BaseService<Dept, DeptDao> {
      * 批量插入
      * @param deptList
      */
-    void insertList(List<Dept> deptList,Boolean updateParam);
+    String insertList(List<Dept> deptList,Boolean updateParam);
 }

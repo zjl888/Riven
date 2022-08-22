@@ -55,7 +55,7 @@ public interface DeptDao extends BaseDao<Dept,Serializable> {
      */
     //FIND_IN_SET(str,strlist),str是否存在于strlist当中，不存在返回0
     //存在，例如（‘1’，‘3，2，1’）返回3，即str在strlist中的位置。
-    //需要在达梦数据库中建立find_in_set函数，否则会报错。
+    //需要在达梦数据库中建立find_in_set函数，否则会报错:无法解析的成员访问表达式[FIND_IN_SET]。
     @Query(value = "select count(*) from Z_Dept  where status=0 and del_Flag=0 and FIND_IN_SET(:deptId,ancestors)",nativeQuery = true)
     Integer hasNormalChildDept(Long deptId);
 
@@ -76,4 +76,6 @@ public interface DeptDao extends BaseDao<Dept,Serializable> {
     void updateAncestorsDeptStatus(@Param("dept") Dept dept);
     @Query(value = "select * from z_dept where parent_id=:deptId limit 1",nativeQuery = true)
     Dept selectChildUnique(Long deptId);
+    @Query(value = "select * from z_dept where dept_name=:deptName and org_id=:orgId and parent_id=:parentId limit 1",nativeQuery = true)
+    Dept selectDept(String deptName,Long orgId,Long parentId);
 }

@@ -160,11 +160,11 @@ public class DeptController extends BaseController {
      * @throws Exception
      */
     @PostMapping("/import")
-    public AjaxResult importDept(MultipartFile file,Boolean updateParam) throws Exception {
+    public AjaxResult importDept(MultipartFile file,Boolean updateSupport) throws Exception {
         ExcelUtil<Dept> deptExcelUtil = new ExcelUtil<>(Dept.class);
         List<Dept> deptList = deptExcelUtil.importExcel(file.getInputStream());
-        deptService.insertList(deptList,updateParam);
-        return AjaxResult.success();
+        String msg = deptService.insertList(deptList, updateSupport);
+        return AjaxResult.success(msg);
     }
 
 }

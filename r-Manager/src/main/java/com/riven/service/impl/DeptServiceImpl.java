@@ -7,11 +7,14 @@ import com.riven.exception.ServiceException;
 import com.riven.model.Dept;
 import com.riven.service.DeptService;
 import com.riven.util.SecurityUtils;
+import com.riven.util.SnowflakeIdWorker;
 import com.riven.util.StringUtils;
+import com.riven.util.bean.BeanValidators;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
+import javax.validation.Validator;
 import java.util.*;
 
 /**
@@ -22,6 +25,8 @@ import java.util.*;
 public class DeptServiceImpl extends BaseServiceImpl<Dept, DeptDao> implements DeptService {
     @Resource
     private DeptDao deptDao;
+    @Resource
+    private Validator validator;
 
     /**
      * 判断部门名称是否已存在
@@ -240,10 +245,10 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept, DeptDao> implements D
         }
         return deptList;
     }
-
+    @Transactional
     @Override
-    public void insertList(List<Dept> deptList,Boolean updateParam) {
-        if (StringUtils.isNotEmpty(deptList)||deptList.size()==0){
+    public String insertList(List<Dept> deptList,Boolean updateParam) {
+        if (StringUtils.isEmpty(deptList)||deptList.size()==0){
             throw new ServiceException("导入数据不能为空");
         }
         int successfulNum=0;
@@ -252,8 +257,54 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept, DeptDao> implements D
         StringBuilder failureMsg=new StringBuilder();
         for (Dept dept:deptList
              ) {
-
+            try{
+                //excel中是否有部门名称、机构id、父部门id
+                if (StringUtils.isNotEmpty(dept.getDeptName())&&StringUtils.isNotNull(dept.getOrgId())&&StringUtils.isNotNull(dept.getParentId())){
+                    //同一机构，同一父部门下是否存在同名部门
+                    if (StringUtils.isNull(deptDao.selectDept(dept.getDeptName(),dept.getOrgId(),dept.getParentId()))){
+                        //不存在，插入信息
+                        BeanValidators.validateWithException(validator,dept);
+                        dept.setCreateBy(SecurityUtils.getLoginUser().getUsername());
+                        dept.setCreateTime(new Date());
+                        dept.setDeptId(SnowflakeIdWorker.idWorker.nextId());
+                        dept.setDelFlag("0");
+                        dept.setAncestors(deptDao.findByDeptId(dept.getParentId()).getAncestors()+","+dept.getParentId());
+                        deptDao.save(dept);
+                        successfulNum++;
+                        successMsg.append("<br/>" + successfulNum + "、部门 " + dept.getDeptName() + " 导入成功");
+                    }else if (updateParam){
+                        //存在同名部门，更新信息
+                        BeanValidators.validateWithException(validator,dept);
+                        Dept dept1 = deptDao.findByDeptId(dept.getDeptId());
+                        dept1.setUpdateBy(SecurityUtils.getLoginUser().getUsername());
+                        dept1.setUpdateTime(new Date());
+                        dept1.setOrderNum(dept.getOrderNum());
+                        dept1.setOrgId(dept.getOrgId());
+                        dept1.setParentId(dept.getParentId());
+                        updateDept(dept1);
+                        successfulNum++;
+                        successMsg.append("<br/>" + successfulNum + "、部门 " + dept.getDeptName() + " 更新成功");
+                    }else {
+                        //存在，不更新
+                        failureNum++;
+                        failureMsg.append("<br/>"+ failureNum + "、"+dept.getDeptName()+"插入失败，部门名称已存在");
+                    }
+                }else {
+                    //excel中信息不完整
+                    failureNum++;
+                    failureMsg.append("<br/>"+ failureNum + "excel中未输入部门名称或者岗位id或者pId，插入失败");
+                }
+            }catch (Exception e){
+                failureNum++;
+                failureMsg.append("<br/>" + failureNum + "、部门 " + dept.getDeptName() + " 导入失败："+e.getMessage());
+            }
         }
-        deptDao.saveAllAndFlush(deptList);
+        if (failureNum>0){
+            failureMsg.insert(0,"很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+            throw new ServiceException(failureMsg.toString());
+        }else {
+            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successfulNum + " 条，数据如下：");
+        }
+        return successMsg.toString();
     }
 }
